@@ -19,7 +19,7 @@ local espBoxes = {}
 
 -- === GUI ===
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "RaelHub"
+ScreenGui.Name = "TalosHub"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = PlayerGui
 
@@ -42,7 +42,7 @@ local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1,0,0,50)
 Title.BackgroundColor3 = Color3.fromRGB(45,45,45)
 Title.BorderSizePixel = 0
-Title.Text = "Rael Hub"
+Title.Text = "🇧🇷 Talos Hub"
 Title.TextColor3 = Color3.fromRGB(255,255,255)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 24
@@ -319,7 +319,7 @@ end)
 
 -- msg de boas vindas!
 local LocalPlayer = game.Players.LocalPlayer
-print("Seja bem vindo ao Talos Hub!" .. LocalPlayer.Name)
+print("Seja bem vindo ao Talos Hub! " .. LocalPlayer.Name)
 
 -- Verificação
 local msg = "🇧🇷 Talos Hub foi executado"
