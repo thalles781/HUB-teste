@@ -19,7 +19,7 @@ local espBoxes = {}
 
 -- === GUI ===
 local ScreenGui = Instance.new("ScreenGui")
-ScreenGui.Name = "TalosHub"
+ScreenGui.Name = "RaelHub"
 ScreenGui.ResetOnSpawn = false
 ScreenGui.Parent = PlayerGui
 
@@ -42,7 +42,7 @@ local Title = Instance.new("TextLabel")
 Title.Size = UDim2.new(1,0,0,50)
 Title.BackgroundColor3 = Color3.fromRGB(45,45,45)
 Title.BorderSizePixel = 0
-Title.Text = "🇧🇷 Talos Hub [BETA] "
+Title.Text = "Rael Hub"
 Title.TextColor3 = Color3.fromRGB(255,255,255)
 Title.Font = Enum.Font.GothamBold
 Title.TextSize = 24
@@ -146,7 +146,9 @@ end
 
 local function updateCanvas()
     ContentFrame.CanvasSize = UDim2.new(0,0,0,ContentLayout.AbsoluteContentSize.Y+10)
-end-- Rael Hub completo - Parte 2/3
+end
+
+-- Rael Hub completo - Parte 2/3
 -- Criação das categorias e botões
 
 local Categories = {"Player","Fun","Teleport","ESP"}
@@ -245,6 +247,74 @@ for _,cat in ipairs(Categories) do
 
         updateCanvas()
     end)
+end-- Rael Hub completo - Parte 3/3 (corrigida)
+
+-- Infinity Jump seguro
+UserInputService.JumpRequest:Connect(function()
+    local humanoid = Player.Character and Player.Character:FindFirstChildOfClass("Humanoid")
+    if infJump and humanoid then
+        humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+    end
+end)
+
+-- Noclip
+RunService.Stepped:Connect(function()
+    if noclip and Player.Character then
+        for _, part in pairs(Player.Character:GetDescendants()) do
+            if part:IsA("BasePart") then
+                part.CanCollide = false
+            end
+        end
+    end
+end)
+
+-- Fullbring (apenas cliente)
+RunService.RenderStepped:Connect(function()
+    if fullbring then
+        for _, obj in pairs(Workspace:GetDescendants()) do
+            if obj:IsA("BasePart") then
+                obj.Color = Color3.fromRGB(255, 255, 255)
+                obj.Material = Enum.Material.Neon
+            end
+        end
+    end
+end)
+
+-- ESP Players
+RunService.RenderStepped:Connect(function()
+    if not espEnabled then
+        -- Remove ESP
+        for plr, box in pairs(espBoxes) do
+            if box and box.Parent then
+                box:Destroy()
+            end
+            espBoxes[plr] = nil
+        end
+    else
+        for _, plr in pairs(Players:GetPlayers()) do
+            if plr ~= Player and plr.Character and plr.Character:FindFirstChild("HumanoidRootPart") then
+                if not espBoxes[plr] then
+                    local box = Instance.new("BillboardGui")
+                    box.Adornee = plr.Character.HumanoidRootPart
+                    box.Size = UDim2.new(0, 50, 0, 50)
+                    box.AlwaysOnTop = true
+                    box.Parent = PlayerGui
+
+                    local frame = Instance.new("Frame")
+                    frame.Size = UDim2.new(1, 0, 1, 0)
+                    frame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+                    frame.BorderSizePixel = 2
+                    frame.BackgroundTransparency = 0.5
+                    frame.Parent = box
+
+                    espBoxes[plr] = box
+                end
+            elseif espBoxes[plr] then
+                espBoxes[plr]:Destroy()
+                espBoxes[plr] = nil
+            end
+        end
+    end
 end)
 
 -- msg de boas vindas!
