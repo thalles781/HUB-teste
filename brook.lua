@@ -10,7 +10,7 @@ local Window = Rayfield:CreateWindow({
     ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "Talos Hub"},
     Discord = {Enabled = false, Invite = "JF2F2RANud", RememberJoins = true},
     
-    KeySystem true,
+    LoadingTitle true,
     KeySettings = {
       Title = "Talos Key",
       Subtitle = "Key System",
@@ -20,9 +20,7 @@ local Window = Rayfield:CreateWindow({
       GrabKeyFromSite = false,
       Key = {"keybind", "exploit", "Hubmagico"}
    }
-})
-})
-
+})   
 -- Abas
 local MenuTab = Window:CreateTab("Menu", 4483362458)
 local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458)
