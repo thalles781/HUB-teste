@@ -12,7 +12,7 @@ local camera = workspace.CurrentCamera
 
 -- Window Setup
 local Window = Rayfield:CreateWindow({
-    Name = "Talos Hub | 99 Nights",
+    Name = "Moon Hub | 99 Nights",
     LoadingTitle = "99 Noites Script",
     LoadingSubtitle = "by thalles456u",
     ConfigurationSaving = {
