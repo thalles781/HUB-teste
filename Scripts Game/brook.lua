@@ -2,10 +2,10 @@
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
-    Name = "Talos Hub ( ・ε・)",
-    LoadingTitle = "Talos Hub :)",
-    LoadingSubtitle = "by thalles456u",
-    Theme = "Black",
+    Name = "Moon Hub | Brookhaven",
+    LoadingTitle = "Carregando...",
+    LoadingSubtitle = "Aguarde alguns segundos...",
+    Theme = "Ocean",
     ToggleUIKeybind = "K",
     ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "Talos Hub"},
     Discord = {Enabled = false, Invite = "JF2F2RANud", RememberJoins = true},
@@ -305,5 +305,19 @@ OutrosTab:CreateInput({
         else
             warn("Jogador não encontrado ou sem personagem")
         end
+    end
+})
+
+-- Aba de Creditos
+local CreditsTab = Window:CreateTab("Credits", 4483362458)
+
+CreditsTab:CreateLabel("Feito por: thalles456u")
+CreditsTab:CreateLabel("Interface por: Rayfield")
+CreditsTab:CreateLabel("Alguma dúvida? Entre no nosso discord! Apenas clique na mensagem abaixo!")
+
+CreditsTab:CreateButton({
+    Name = "Clique aqui para copiar o link do Discord!",
+    Callback = function()
+        setclipboard("https://discord.gg/WAGqyEfGJe")
     end
 })
