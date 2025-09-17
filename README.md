@@ -14,3 +14,6 @@ Ideal tanto para jogadores casuais quanto para os mais avançados, o *Moon Hub* 
 
 Se você quer levar sua experiência no Roblox a outro nível, o *Moon Hub* é a escolha definitiva. Um hub, infinitas possibilidades.
 Temos atualizações muito frequentes!
+
+Entre no nosso discord, ele ainda está sendo produzido!
+```https://discord.gg/WAGqyEfGJe```
