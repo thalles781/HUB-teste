@@ -12,9 +12,10 @@ local camera = workspace.CurrentCamera
 
 -- Window Setup
 local Window = Rayfield:CreateWindow({
-    Name = "99 Nights",
-    LoadingTitle = "99 Nights Script",
-    LoadingSubtitle = "by Raygull",
+    Name = "Moon Hub | 99 Noites",
+    LoadingTitle = "Carregando...",
+    LoadingSubtitle = "Aguarde uns segundos...",
+    Theme = "Ocean",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = nil,
@@ -397,7 +398,7 @@ HomeTab:CreateToggle({
 })
 
 HomeTab:CreateToggle({
-    Name = "NPC ESP",
+    Name = "NPC Esp",
     CurrentValue = false,
     Callback = function(value)
         toggleNPCESP(value)
@@ -411,7 +412,7 @@ HomeTab:CreateToggle({
 })
 
 HomeTab:CreateToggle({
-    Name = "Auto Tree Farm (Small Tree)",
+    Name = "Auto Tree Farm (Apens árvores pequenas)",
     CurrentValue = false,
     Callback = function(value)
         AutoTreeFarmEnabled = value
@@ -419,7 +420,7 @@ HomeTab:CreateToggle({
 })
 
 HomeTab:CreateToggle({
-    Name = "Aimbot (Right Click)",
+    Name = "Aimbot [BETA]",
     CurrentValue = false,
     Callback = function(value)
         AimbotEnabled = value
