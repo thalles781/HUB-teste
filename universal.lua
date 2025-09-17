@@ -20,7 +20,6 @@ local Window = Rayfield:CreateWindow({
 -- Aba Menu
 local MenuTab = Window:CreateTab("Menu", 4483362458)
 
--- Variáveis do jogador
 local Humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 local HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 local WalkSpeed = 16
@@ -175,9 +174,7 @@ TeleportTab:CreateButton({
     end
 })
 
-----------------------------------------------------
--- Aba Créditos
-----------------------------------------------------
+-- Créditos
 local CreditsTab = Window:CreateTab("Créditos", 4483362458)
 CreditsTab:CreateLabel("Criador: thalles456u")
 CreditsTab:CreateLabel("Interface: Rayfield")
@@ -186,10 +183,6 @@ CreditsTab:CreateLabel("Qualquer dúvida sobre o Hub entre no discord, apenas cl
 CreditsTab:CreateButton({
     Name = "Clique aqui para entrar no discord do Hub!",
     Callback = function()
-        if setclipboard then
-            setclipboard("https://discord.gg/WAGqyEfGJe")
-        else
-            warn("Seu executor não suporta setclipboard, entre em contato com o suporte do Hub!")
-        end
+        setclipboard("https://discord.gg/WAGqyEfGJe")
     end
 })
