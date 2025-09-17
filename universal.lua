@@ -12,6 +12,7 @@ local Window = Rayfield:CreateWindow({
     Name = "Moon Hub | Universal",
     LoadingTitle = "Carregando...",
     LoadingSubtitle = "Aguarde um tempo...",
+    Theme = "Ocean",
     ConfigurationSaving = {
         Enabled = true,
         FolderName = "UniversalHub",
@@ -176,7 +177,7 @@ CreditsTab:CreateButton({
   Name = "Clique aqui para entrar no discord do Hub!"
   Callback = function()
       setclipboard("https://discord.gg/WAGqyEfGJe")
-  end
+    end
 })
   
 --// Atualizar lista de players ao iniciar
