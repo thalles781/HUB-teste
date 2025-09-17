@@ -164,14 +164,15 @@ TeleportTab:CreateButton({
 })
 
 -- Créditos
-local CreditsTab = Window:CreateTab("Créditos", 4483362458)
-CreditsTab:CreateLabel("Criador: thalles456u")
-CreditsTab:CreateLabel("Interface: Rayfield")
-CreditsTab:CreateLabel("Qualquer dúvida sobre o Hub entre no discord, apenas clique no botão abaixo!")
+local CreditsTab = Window:CreateTab("Credits", 4483362458)
+
+CreditsTab:CreateLabel("Feito por: thalles456u")
+CreditsTab:CreateLabel("Interface por: Rayfield")
+CreditsTab:CreateLabel("Alguma dúvida? Entre no nosso discord! Apenas clique na mensagem abaixo!")
 
 CreditsTab:CreateButton({
-    Name = "Clique aqui para entrar no discord do Hub!",
+    Name = "Clique aqui para copiar o link do Discord!",
     Callback = function()
         setclipboard("https://discord.gg/WAGqyEfGJe")
-    end
+    end,
 })
