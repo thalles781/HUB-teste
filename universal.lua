@@ -17,16 +17,19 @@ local Window = Rayfield:CreateWindow({
     ConfigurationSaving = {Enabled = true, FolderName = "UniversalHub"}
 })
 
--- Aba Menu
-local MenuTab = Window:CreateTab("Menu", 4483362458)
-
 -- Variáveis do jogador
 local Humanoid = LocalPlayer.Character and LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 local HRP = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 local WalkSpeed = 16
 local JumpPower = 50
 
--- Funções para atualizar
+-- Atualiza humanoid quando o player respawnar
+LocalPlayer.CharacterAdded:Connect(function(char)
+    Humanoid = char:WaitForChild("Humanoid")
+    HRP = char:WaitForChild("HumanoidRootPart")
+end)
+
+-- Funções de update
 local function UpdateSpeed(speed)
     if Humanoid then
         Humanoid.WalkSpeed = speed
@@ -39,12 +42,18 @@ local function UpdateJump(jump)
     end
 end
 
--- Sliders Rayfield
+----------------------------------------------------
+-- Aba Menu
+----------------------------------------------------
+local MenuTab = Window:CreateTab("Menu", 4483362458)
+
+-- Sliders
 MenuTab:CreateSlider({
     Name = "WalkSpeed",
-    Min = 16,
-    Max = 100,
-    Default = 16,
+    Range = {16, 100},
+    Increment = 1,
+    Suffix = "speed",
+    CurrentValue = 16,
     Callback = function(value)
         WalkSpeed = value
         UpdateSpeed(WalkSpeed)
@@ -52,10 +61,11 @@ MenuTab:CreateSlider({
 })
 
 MenuTab:CreateSlider({
-    Name = "JumpForce",
-    Min = 50,
-    Max = 300,
-    Default = 50,
+    Name = "JumpPower",
+    Range = {50, 300},
+    Increment = 5,
+    Suffix = "power",
+    CurrentValue = 50,
     Callback = function(value)
         JumpPower = value
         UpdateJump(JumpPower)
@@ -74,17 +84,17 @@ MenuTab:CreateToggle({
 
 UIS.InputBegan:Connect(function(input, gameProcessed)
     if not gameProcessed and InfinityJumpEnabled then
-        if input.UserInputType == Enum.UserInputType.Keyboard then
-            if input.KeyCode == Enum.KeyCode.Space then
-                if Humanoid and HRP then
-                    Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-                end
+        if input.UserInputType == Enum.UserInputType.Keyboard and input.KeyCode == Enum.KeyCode.Space then
+            if Humanoid and HRP then
+                Humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
             end
         end
     end
 end)
 
--- ESP
+----------------------------------------------------
+-- Aba ESP
+----------------------------------------------------
 local ESPTab = Window:CreateTab("ESP", 4483362458)
 local ESPObjects = {}
 
@@ -117,11 +127,24 @@ local function RemoveESP(player)
     end
 end
 
+Players.PlayerAdded:Connect(CreateESP)
+Players.PlayerRemoving:Connect(RemoveESP)
+
 RunService.RenderStepped:Connect(function()
     for _, player in pairs(Players:GetPlayers()) do
-        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            
-            -- Teleport
+        if player ~= LocalPlayer and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            if not ESPObjects[player] then
+                CreateESP(player)
+            else
+                ESPObjects[player].Adornee = player.Character.HumanoidRootPart
+            end
+        end
+    end
+end)
+
+----------------------------------------------------
+-- Aba Teleport
+----------------------------------------------------
 local TeleportTab = Window:CreateTab("Teleport", 4483362458)
 local PlayerList = {}
 local SelectedPlayer = nil
@@ -134,6 +157,8 @@ local function UpdatePlayerList()
         end
     end
 end
+
+UpdatePlayerList()
 
 local PlayerDropdown = TeleportTab:CreateDropdown({
     Name = "Escolha um Player",
@@ -163,16 +188,21 @@ TeleportTab:CreateButton({
     end
 })
 
--- Créditos
-local CreditsTab = Window:CreateTab("Credits", 4483362458)
-
-CreditsTab:CreateLabel("Feito por: thalles456u")
-CreditsTab:CreateLabel("Interface por: Rayfield")
-CreditsTab:CreateLabel("Alguma dúvida? Entre no nosso discord! Apenas clique na mensagem abaixo!")
+----------------------------------------------------
+-- Aba Créditos
+----------------------------------------------------
+local CreditsTab = Window:CreateTab("Créditos", 4483362458)
+CreditsTab:CreateLabel("Criador: thalles456u")
+CreditsTab:CreateLabel("Interface: Rayfield")
+CreditsTab:CreateLabel("Qualquer dúvida sobre o Hub entre no discord, apenas clique no botão abaixo!")
 
 CreditsTab:CreateButton({
-    Name = "Clique aqui para copiar o link do Discord!",
+    Name = "Clique aqui para entrar no discord do Hub!",
     Callback = function()
-        setclipboard("https://discord.gg/WAGqyEfGJe")
-    end,
+        if setclipboard then
+            setclipboard("https://discord.gg/WAGqyEfGJe")
+        else
+            warn("Seu executor não suporta setclipboard, entre em contato com o suporte do Hub!")
+        end
+    end
 })
