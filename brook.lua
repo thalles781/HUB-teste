@@ -10,7 +10,7 @@ local Window = Rayfield:CreateWindow({
     ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "Talos Hub"},
     Discord = {Enabled = false, Invite = "JF2F2RANud", RememberJoins = true},
     
-    KeySystem = true,
+    KeySystem = false,
     KeySettings = {
       Title = "Talos Key",
       Subtitle = "Key System",
