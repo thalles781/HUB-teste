@@ -10,15 +10,15 @@ local Window = Rayfield:CreateWindow({
     ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "Talos Hub"},
     Discord = {Enabled = false, Invite = "JF2F2RANud", RememberJoins = true},
     
-    KeySystem = false,
+    KeySystem = true,
     KeySettings = {
       Title = "Talos Key",
       Subtitle = "Key System",
-      Note = "Para conseguir a key peça ao talos(Thalles)",
+      Note = "Entre no site para conseguira key! É simples e fácil de conseguir!",
       FileName = "Key",
-      SaveKey = true,
-      GrabKeyFromSite = false,
-      Key = {"keybind", "exploit", "Hubmagico"}
+      SaveKey = false,
+      GrabKeyFromSite = true,
+      Key = {"K9D3-MQ7Z-T4L2", "L2C8-BJ8N-XAS7", "R8F6-V1XK-P0Z3", "H3Y9-CA4M-N7Q8", "W2Z5-JL8R-K6T1", "M7P2-QX9D-F4G5", "T1N6-BV3Y-Z8H4", "C5X8-L0P3-R9K7", "D9J2-KF5L-H8R0", "Z4M1-GT7Q-V2S6"}
    }
 })   
 -- Abas
