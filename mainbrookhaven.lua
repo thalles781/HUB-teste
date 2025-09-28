@@ -8,12 +8,15 @@ local Window = Rayfield:CreateWindow({
     Theme = "Ocean",
     ToggleUIKeybind = "K",
     ConfigurationSaving = {Enabled = true, FolderName = nil, FileName = "Talos Hub"},
-    Discord = {
-        Enabled = true, 
-        Invite = "WY2Q4dS88N", 
-        RememberJoins = true},
     
-    KeySystem = true,
+    Discord = {
+        Enabled = false, 
+        Invite = "WY2Q4dS88N", 
+        RememberJoins = true
+        
+    },
+    
+    KeySystem = false,
     KeySettings = {
       Title = "Talos Key",
       Subtitle = "Key System",
