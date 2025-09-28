@@ -12,10 +12,11 @@ local Keys = {
     "Z4M1-GT7Q-V2S6"
 }
 
-local URL =
-"https://raw.githubusercontent.com/thalles781/HUB-teste/refs/heads/main/mainbrookhaven.lua" -- <<--- troca aqui
+local URL = "https://raw.githubusercontent.com/thalles781/HUB-teste/refs/heads/main/mainbrookhaven.lua" -- HUB
+local GetKeyURL = "https://iusanh.mimo.run/index.html" -- <<--- link para pegar a key
 
 local Players = game:GetService("Players")
+local LocalPlayer = game.Players.LocalPlayer
 local player = Players.LocalPlayer
 
 -- Cria ScreenGui/Frame simples e responsivo
@@ -25,8 +26,8 @@ screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 360, 0, 160)
-frame.Position = UDim2.new(0.5, -180, 0.5, -80)
+frame.Size = UDim2.new(0, 360, 0, 180)
+frame.Position = UDim2.new(0.5, -180, 0.5, -90)
 frame.AnchorPoint = Vector2.new(0.5, 0.5)
 frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.BorderSizePixel = 0
@@ -64,15 +65,27 @@ status.Font = Enum.Font.Gotham
 status.TextSize = 14
 status.Parent = frame
 
-local btn = Instance.new("TextButton")
-btn.Size = UDim2.new(1, -40, 0, 34)
-btn.Position = UDim2.new(0, 20, 0, 96)
-btn.Text = "Verificar Key"
-btn.BackgroundColor3 = Color3.fromRGB(70,70,70)
-btn.TextColor3 = Color3.fromRGB(255,255,255)
-btn.Font = Enum.Font.GothamSemibold
-btn.TextSize = 16
-btn.Parent = frame
+-- Botão Verificar Key
+local btnVerify = Instance.new("TextButton")
+btnVerify.Size = UDim2.new(0.5, -30, 0, 34)
+btnVerify.Position = UDim2.new(0, 20, 0, 96)
+btnVerify.Text = "Verificar Key"
+btnVerify.BackgroundColor3 = Color3.fromRGB(70,70,70)
+btnVerify.TextColor3 = Color3.fromRGB(255,255,255)
+btnVerify.Font = Enum.Font.GothamSemibold
+btnVerify.TextSize = 16
+btnVerify.Parent = frame
+
+-- Botão Get Key
+local btnGet = Instance.new("TextButton")
+btnGet.Size = UDim2.new(0.5, -30, 0, 34)
+btnGet.Position = UDim2.new(0.5, 10, 0, 96)
+btnGet.Text = "Get Key"
+btnGet.BackgroundColor3 = Color3.fromRGB(45,120,200)
+btnGet.TextColor3 = Color3.fromRGB(255,255,255)
+btnGet.Font = Enum.Font.GothamSemibold
+btnGet.TextSize = 16
+btnGet.Parent = frame
 
 -- Função que valida a key
 local function isValidKey(k)
@@ -82,9 +95,9 @@ local function isValidKey(k)
     return false
 end
 
--- Comportamento ao clicar
-btn.MouseButton1Click:Connect(function()
-    local key = tostring(input.Text):gsub("%s+", "") -- tira espaços redundantes
+-- Botão Verificar Key
+btnVerify.MouseButton1Click:Connect(function()
+    local key = tostring(input.Text):gsub("%s+", "")
     if key == "" then
         status.Text = "Digite uma key antes."
         status.TextColor3 = Color3.fromRGB(255,180,0)
@@ -92,30 +105,24 @@ btn.MouseButton1Click:Connect(function()
     end
 
     if isValidKey(key) then
-        -- Sucesso: some a UI e carrega o hub
         status.Text = "✔️ Key correta! Carregando hub..."
         status.TextColor3 = Color3.fromRGB(0,220,0)
 
-        -- efeito visual opcional antes de remover
         for i = 1, 8 do
             frame.BackgroundTransparency = i / 8
             wait(0.02)
         end
 
-        -- Remove a interface de key
         pcall(function() screenGui:Destroy() end)
 
-        -- Carrega o Rayfield/hub do link (versão 2)
         local ok, err = pcall(function()
-            local s = game:HttpGet(HubURL)
+            local s = game:HttpGet(URL)
             local f = loadstring(s)
             f()
         end)
 
         if not ok then
-            -- Se falhar ao puxar/rodar o hub, mostra mensagem no chat e (opcional) recria a tela
             warn("Falha ao carregar hub: "..tostring(err))
-            -- opcional: criar uma notificação do erro para o jogador
             local StarterGui = game:GetService("StarterGui")
             pcall(function()
                 StarterGui:SetCore("SendNotification", {
@@ -130,3 +137,18 @@ btn.MouseButton1Click:Connect(function()
         status.TextColor3 = Color3.fromRGB(255,60,60)
     end
 end)
+
+-- Botão Get Key (abre o site)
+btnGet.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(GetKeyURL)
+        status.Text = "🔗 Link copiado! Cole no navegador."
+        status.TextColor3 = Color3.fromRGB(0,180,255)
+    else
+        status.Text = "Não foi possível copiar, abra: "..GetKeyURL
+        status.TextColor3 = Color3.fromRGB(255,180,0)
+    end
+end)
+
+wait(2)
+print("Seja bem vindo ao Moon Hub! " .. LocalPlayer.Name)
