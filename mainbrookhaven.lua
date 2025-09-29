@@ -13,34 +13,43 @@ local Window = Rayfield:CreateWindow({
         Enabled = false, 
         Invite = "WY2Q4dS88N", 
         RememberJoins = true
-        
     },
     
     KeySystem = false,
     KeySettings = {
       Title = "Talos Key",
       Subtitle = "Key System",
-      Note = "Entre no site para conseguira key! É simples e fácil de conseguir!",
+      Note = "Entre no site para conseguir a key! É simples e fácil de conseguir!",
       FileName = "Key",
       SaveKey = false,
       GrabKeyFromSite = true,
       Key = {"K9D3-MQ7Z-T4L2", "L2C8-BJ8N-XAS7", "R8F6-V1XK-P0Z3", "H3Y9-CA4M-N7Q8", "W2Z5-JL8R-K6T1", "M7P2-QX9D-F4G5", "T1N6-BV3Y-Z8H4", "C5X8-L0P3-R9K7", "D9J2-KF5L-H8R0", "Z4M1-GT7Q-V2S6"}
    }
 })   
--- Abas
-local MenuTab = Window:CreateTab("Menu", 4483362458)
-local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458)
-local FunTab = Window:CreateTab("Fun", 4483362458)
-local ESPTab = Window:CreateTab("ESP", 4483362458)
-local OutrosTab = Window:CreateTab("Outros", 4483362458)
 
 -- =========================
--- MENU
+-- ABA DE CRÉDITOS (primeira)
 -- =========================
-local MenuSection = MenuTab:CreateSection("Funções Menu")
+local CreditsTab = Window:CreateTab("Credits", 4483362458)
+
+CreditsTab:CreateLabel("Feito por: thalles456u")
+CreditsTab:CreateLabel("Interface por: Rayfield")
+CreditsTab:CreateLabel("Alguma dúvida? Entre no nosso discord! Apenas clique na mensagem abaixo!")
+
+CreditsTab:CreateButton({
+    Name = "Clique aqui para copiar o link do Discord!",
+    Callback = function()
+        setclipboard("https://discord.gg/WAGqyEfGJe")
+    end
+})
+
+-- =========================
+-- ABA LOCALPLAYER (segunda)
+-- =========================
+local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458)
 
 -- Speed
-MenuTab:CreateInput({
+LocalPlayerTab:CreateInput({
     Name = "Speed",
     PlaceholderText = "Digite a velocidade",
     RemoveTextAfterFocusLost = false,
@@ -55,7 +64,7 @@ MenuTab:CreateInput({
 
 -- Infinity Jump
 local InfinityJumpEnabled = false
-MenuTab:CreateToggle({
+LocalPlayerTab:CreateToggle({
     Name = "Infinity Jump",
     CurrentValue = false,
     Callback = function(Value)
@@ -70,11 +79,6 @@ game:GetService("UserInputService").JumpRequest:Connect(function()
         end
     end
 end)
-
--- =========================
--- LOCALPLAYER
--- =========================
-local LPSection = LocalPlayerTab:CreateSection("Funções LocalPlayer")
 
 -- Noclip
 local NoclipEnabled = false
@@ -166,16 +170,13 @@ LocalPlayerTab:CreateInput({
     end
 })
 
--- =========================
--- FUN
--- =========================
-local FlySection = FunTab:CreateSection("Funções Fly")
+-- Fly
 local FlyEnabled = false
 local FlySpeed = 50
 local FlyBodyVelocity
 local FlyConnection
 
-FunTab:CreateToggle({
+LocalPlayerTab:CreateToggle({
     Name = "Fly (PC & Mobile)",
     CurrentValue = false,
     Callback = function(Value)
@@ -218,70 +219,11 @@ FunTab:CreateToggle({
 })
 
 -- =========================
--- ESP
+-- ABA TELEPORT
 -- =========================
-local ESPSection = ESPTab:CreateSection("ESP Players")
-local ESPEnabled = false
-local ESPBoxes = {}
-local ESPConnections = {}
+local TeleportTab = Window:CreateTab("Teleport", 4483362458)
 
-ESPTab:CreateToggle({
-    Name = "Ativar ESP",
-    CurrentValue = false,
-    Callback = function(Value)
-        ESPEnabled = Value
-
-        -- Desliga ESP antigo
-        for _, gui in pairs(ESPBoxes) do
-            gui:Destroy()
-        end
-        ESPBoxes = {}
-        for _, conn in pairs(ESPConnections) do
-            conn:Disconnect()
-        end
-        ESPConnections = {}
-
-        if ESPEnabled then
-            local function AddESP(p)
-                if p == game.Players.LocalPlayer then return end
-                if not p.Character or not p.Character:FindFirstChild("HumanoidRootPart") then return end
-
-                local bill = Instance.new("BillboardGui")
-                bill.Name = "ESP"
-                bill.Adornee = p.Character.HumanoidRootPart
-                bill.Size = UDim2.new(0,100,0,50)
-                bill.AlwaysOnTop = true
-                bill.Parent = p.Character
-
-                local text = Instance.new("TextLabel")
-                text.Size = UDim2.new(1,0,1,0)
-                text.BackgroundTransparency = 1
-                text.TextColor3 = Color3.fromRGB(255,0,0)
-                text.TextStrokeTransparency = 0
-                text.TextScaled = true
-                text.Text = p.Name
-                text.Parent = bill
-
-                ESPBoxes[p] = bill
-            end
-
-            for _, p in pairs(game.Players:GetPlayers()) do
-                AddESP(p)
-            end
-
-            local conn = game.Players.PlayerAdded:Connect(AddESP)
-            table.insert(ESPConnections, conn)
-        end
-    end
-})
-
--- =========================
--- OUTROS
--- =========================
-local OutrosSection = OutrosTab:CreateSection("Funções Extras")
-
--- Teleporte
-OutrosTab:CreateInput({
+TeleportTab:CreateInput({
     Name = "Teleporte por Nick",
     PlaceholderText = "Digite o Nick do jogador",
     RemoveTextAfterFocusLost = false,
@@ -298,8 +240,73 @@ OutrosTab:CreateInput({
     end
 })
 
--- Spectar
-OutrosTab:CreateInput({
+-- =========================
+-- ABA TELEPORT
+-- =========================
+local TeleportTab = Window:CreateTab("Teleport", 4483362458)
+
+-- Teleporte por Nick
+TeleportTab:CreateInput({
+    Name = "Teleporte por Nick",
+    PlaceholderText = "Digite o Nick do jogador",
+    RemoveTextAfterFocusLost = false,
+    Callback = function(Nick)
+        local target = game.Players:FindFirstChild(Nick)
+        local player = game.Players.LocalPlayer
+        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
+            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame + Vector3.new(0,3,0)
+            end
+        else
+            warn("Jogador não encontrado ou sem personagem")
+        end
+    end
+})
+
+-- Lista de lugares fixos
+TeleportTab:CreateSection("Lugares Fixos")
+
+local Lugares = {
+    ["Praça"] = Vector3.new(-0.57, 2.71, -1.05)
+}
+
+local LugarSelecionado = "Praça" -- já começa como Praça
+
+TeleportTab:CreateDropdown({
+    Name = "Escolha o lugar",
+    Options = {"Praça"},
+    CurrentOption = {"Praça"},
+    MultipleOptions = false,
+    Callback = function(Option)
+        LugarSelecionado = Option[1]
+    end
+})
+
+TeleportTab:CreateButton({
+    Name = "Teleportar",
+    Callback = function()
+        local player = game.Players.LocalPlayer
+        if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+            if LugarSelecionado and Lugares[LugarSelecionado] then
+                player.Character.HumanoidRootPart.CFrame = CFrame.new(Lugares[LugarSelecionado])
+            else
+                Rayfield:Notify({
+                    Title = "Teleport",
+                    Content = "Nenhum lugar selecionado!",
+                    Duration = 5,
+                    Image = 4483362458
+                })
+            end
+        end
+    end
+})
+
+-- =========================
+-- ABA SPECT
+-- =========================
+local SpectTab = Window:CreateTab("Spect", 4483362458)
+
+SpectTab:CreateInput({
     Name = "Spectar por Nick",
     PlaceholderText = "Digite o Nick do jogador",
     RemoveTextAfterFocusLost = false,
@@ -314,12 +321,11 @@ OutrosTab:CreateInput({
     end
 })
 
--- Aba Casa!
+-- =========================
+-- ABA CASA
+-- =========================
 local CasaTab = Window:CreateTab("Casa", 4483362458)
 
-CasaTab:CreateLabel("Essas funções ainda estão sendo desenvolvidas!")
-
--- Botão manual Unban All
 CasaTab:CreateButton({
     Name = "Unban All",
     Callback = function()
@@ -339,7 +345,6 @@ CasaTab:CreateButton({
     end
 })
 
--- Toggle Auto Unban
 local AutoUnban = false
 local AutoUnbanConnection
 
@@ -349,20 +354,16 @@ CasaTab:CreateToggle({
     Callback = function(Value)
         AutoUnban = Value
         if AutoUnban then
-            -- Remove os que já existem
             for _, obj in pairs(workspace:GetDescendants()) do
                 if obj.Name == "BannedBlock" then
                     obj:Destroy()
                 end
             end
-
-            -- Conexão para novos objetos
             AutoUnbanConnection = workspace.DescendantAdded:Connect(function(obj)
                 if obj.Name == "BannedBlock" then
                     obj:Destroy()
                 end
             end)
-
             Rayfield:Notify({
                 Title = "Auto Unban",
                 Content = "Ativado! Todos os BannedBlocks serão removidos automaticamente.",
@@ -374,7 +375,6 @@ CasaTab:CreateToggle({
                 AutoUnbanConnection:Disconnect()
                 AutoUnbanConnection = nil
             end
-
             Rayfield:Notify({
                 Title = "Auto Unban",
                 Content = "Desativado!",
@@ -385,16 +385,151 @@ CasaTab:CreateToggle({
     end
 })
 
--- Aba de Creditos
-local CreditsTab = Window:CreateTab("Credits", 4483362458)
+-- =========================
+-- ABA TOOLS
+-- =========================
+local ToolsTab = Window:CreateTab("Tools", 4483362458)
+ToolsTab:CreateLabel("Essas funções ainda estão sendo desenvolvidas!")
 
-CreditsTab:CreateLabel("Feito por: thalles456u")
-CreditsTab:CreateLabel("Interface por: Rayfield")
-CreditsTab:CreateLabel("Alguma dúvida? Entre no nosso discord! Apenas clique na mensagem abaixo!")
+-- =========================
+-- ESP (sem alteração)
+-- =========================
+local ESPTab = Window:CreateTab("ESP", 4483362458)
 
-CreditsTab:CreateButton({
-    Name = "Clique aqui para copiar o link do Discord!",
-    Callback = function()
-        setclipboard("https://discord.gg/WAGqyEfGJe")
+local ESPEnabled = false
+local ESPBoxes = {}
+local ESPConnections = {}
+
+ESPTab:CreateToggle({
+    Name = "Ativar ESP",
+    CurrentValue = false,
+    Callback = function(Value)
+        ESPEnabled = Value
+        for _, gui in pairs(ESPBoxes) do
+            gui:Destroy()
+        end
+        ESPBoxes = {}
+        for _, conn in pairs(ESPConnections) do
+            conn:Disconnect()
+        end
+        ESPConnections = {}
+        if ESPEnabled then
+            local function AddESP(p)
+                if p == game.Players.LocalPlayer then return end
+                if not p.Character or not p.Character:FindFirstChild("HumanoidRootPart") then return end
+                local bill = Instance.new("BillboardGui")
+                bill.Name = "ESP"
+                bill.Adornee = p.Character.HumanoidRootPart
+                bill.Size = UDim2.new(0,100,0,50)
+                bill.AlwaysOnTop = true
+                bill.Parent = p.Character
+                local text = Instance.new("TextLabel")
+                text.Size = UDim2.new(1,0,1,0)
+                text.BackgroundTransparency = 1
+                text.TextColor3 = Color3.fromRGB(255,0,0)
+                text.TextStrokeTransparency = 0
+                text.TextScaled = true
+                text.Text = p.Name
+                text.Parent = bill
+                ESPBoxes[p] = bill
+            end
+            for _, p in pairs(game.Players:GetPlayers()) do
+                AddESP(p)
+            end
+            local conn = game.Players.PlayerAdded:Connect(AddESP)
+            table.insert(ESPConnections, conn)
+        end
     end
 })
+
+-- =========================
+-- ESP Vehicles
+-- =========================
+local VehiclesFolder = workspace:WaitForChild("Vehicles")
+local EspVehicles = false
+local EspVehiclesConnections = {}
+
+local function addVehicleEsp(vehicle)
+    if not vehicle:IsA("Model") then return end
+    local primary = vehicle:FindFirstChildWhichIsA("BasePart")
+    if not primary then return end
+
+    -- Evita duplicar ESP
+    if primary:FindFirstChild("ESP_Vehicle") then return end
+
+    local billboard = Instance.new("BillboardGui")
+    billboard.Name = "ESP_Vehicle"
+    billboard.Size = UDim2.new(0, 100, 0, 20)
+    billboard.AlwaysOnTop = true
+    billboard.StudsOffset = Vector3.new(0, 3, 0)
+    billboard.Parent = primary
+
+    local label = Instance.new("TextLabel")
+    label.Size = UDim2.new(1, 0, 1, 0)
+    label.BackgroundTransparency = 1
+    label.TextColor3 = Color3.fromRGB(255, 255, 0)
+    label.TextStrokeTransparency = 0
+    label.TextScaled = true
+    label.Text = vehicle.Name
+    label.Parent = billboard
+end
+
+local function removeVehicleEsp(vehicle)
+    if not vehicle:IsA("Model") then return end
+    local primary = vehicle:FindFirstChildWhichIsA("BasePart")
+    if not primary then return end
+    if primary:FindFirstChild("ESP_Vehicle") then
+        primary.ESP_Vehicle:Destroy()
+    end
+end
+
+local function enableVehicleEsp()
+    -- Adiciona ESP a todos os carros já existentes
+    for _, vehicle in pairs(VehiclesFolder:GetChildren()) do
+        addVehicleEsp(vehicle)
+    end
+
+    -- Detecta novos carros
+    EspVehiclesConnections["Added"] = VehiclesFolder.ChildAdded:Connect(function(vehicle)
+        task.wait(0.2) -- espera carregar a model
+        addVehicleEsp(vehicle)
+    end)
+
+    -- Remove ESP de carros que forem deletados
+    EspVehiclesConnections["Removed"] = VehiclesFolder.ChildRemoved:Connect(function(vehicle)
+        removeVehicleEsp(vehicle)
+    end)
+end
+
+local function disableVehicleEsp()
+    -- Remove todos ESP existentes
+    for _, vehicle in pairs(VehiclesFolder:GetChildren()) do
+        removeVehicleEsp(vehicle)
+    end
+
+    -- Desconecta eventos
+    for _, conn in pairs(EspVehiclesConnections) do
+        conn:Disconnect()
+    end
+    EspVehiclesConnections = {}
+end
+
+-- Toggle dentro da aba ESP
+EspTab:CreateToggle({
+    Name = "ESP Vehicles",
+    CurrentValue = false,
+    Callback = function(Value)
+        EspVehicles = Value
+        if EspVehicles then
+            enableVehicleEsp()
+        else
+            disableVehicleEsp()
+        end
+    end
+})
+
+-- =========================
+-- ABA VISUAL
+-- =========================
+local VisualTab = Window:CreateTab("Visual", 4483362458)
+VisualTab:CreateLabel("Em breve...")
