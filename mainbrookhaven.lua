@@ -314,6 +314,77 @@ OutrosTab:CreateInput({
     end
 })
 
+-- Aba Casa!
+local CasaTab = Window:CreateTab("Casa", 4483362458)
+
+CasaTab:CreateLabel("Essas funções ainda estão sendo desenvolvidas!")
+
+-- Botão manual Unban All
+CasaTab:CreateButton({
+    Name = "Unban All",
+    Callback = function()
+        local count = 0
+        for _, obj in pairs(workspace:GetDescendants()) do
+            if obj.Name == "BannedBlock" then
+                obj:Destroy()
+                count = count + 1
+            end
+        end
+        Rayfield:Notify({
+            Title = "Unban All",
+            Content = tostring(count).." BannedBlocks removidos!",
+            Duration = 5,
+            Image = 4483362458
+        })
+    end
+})
+
+-- Toggle Auto Unban
+local AutoUnban = false
+local AutoUnbanConnection
+
+CasaTab:CreateToggle({
+    Name = "Auto Unban",
+    CurrentValue = false,
+    Callback = function(Value)
+        AutoUnban = Value
+        if AutoUnban then
+            -- Remove os que já existem
+            for _, obj in pairs(workspace:GetDescendants()) do
+                if obj.Name == "BannedBlock" then
+                    obj:Destroy()
+                end
+            end
+
+            -- Conexão para novos objetos
+            AutoUnbanConnection = workspace.DescendantAdded:Connect(function(obj)
+                if obj.Name == "BannedBlock" then
+                    obj:Destroy()
+                end
+            end)
+
+            Rayfield:Notify({
+                Title = "Auto Unban",
+                Content = "Ativado! Todos os BannedBlocks serão removidos automaticamente.",
+                Duration = 5,
+                Image = 4483362458
+            })
+        else
+            if AutoUnbanConnection then
+                AutoUnbanConnection:Disconnect()
+                AutoUnbanConnection = nil
+            end
+
+            Rayfield:Notify({
+                Title = "Auto Unban",
+                Content = "Desativado!",
+                Duration = 5,
+                Image = 4483362458
+            })
+        end
+    end
+})
+
 -- Aba de Creditos
 local CreditsTab = Window:CreateTab("Credits", 4483362458)
 

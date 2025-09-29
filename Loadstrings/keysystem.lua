@@ -33,6 +33,10 @@ frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
 
+local corner = Instance.new("UICorner")
+corner.Radius = 2
+corner.Parent = frame
+
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, 0, 0, 36)
 title.Position = UDim2.new(0, 0, 0, 0)
@@ -45,6 +49,7 @@ title.Parent = frame
 
 local input = Instance.new("TextBox")
 input.Size = UDim2.new(1, -40, 0, 36)
+input.Text = ""
 input.Position = UDim2.new(0, 20, 0, 48)
 input.PlaceholderText = "Digite sua key aqui (ex: key1234)"
 input.ClearTextOnFocus = false
