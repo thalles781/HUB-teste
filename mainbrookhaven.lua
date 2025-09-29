@@ -67,7 +67,7 @@ LocalPlayerTab:CreateInput({
 -- Infinity Jump
 local InfinityJumpEnabled = false
 LocalPlayerTab:CreateToggle({
-    Name = "Pulo Infinito",
+    Name = "Infity Jump",
     CurrentValue = false,
     Callback = function(Value)
         InfinityJumpEnabled = Value
@@ -105,37 +105,14 @@ game:GetService("RunService").Stepped:Connect(function()
 end)
 
 -- Fly
-local FlyEnabled = false
-local FlySpeed = 50
-local BodyVelocity
-
-LocalPlayerTab:CreateToggle({
-    Name = "Voar (PC & Mobile)",
-    CurrentValue = false,
-    Callback = function(Value)
-        FlyEnabled = Value
-        local player = game.Players.LocalPlayer
-        if FlyEnabled and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-            local hrp = player.Character.HumanoidRootPart
-            BodyVelocity = Instance.new("BodyVelocity")
-            BodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
-            BodyVelocity.Velocity = Vector3.new(0,0,0)
-            BodyVelocity.Parent = hrp
-
-            game:GetService("RunService").Heartbeat:Connect(function()
-                if FlyEnabled and BodyVelocity and hrp then
-                    local moveDir = player.Character.Humanoid.MoveDirection
-                    BodyVelocity.Velocity = Vector3.new(moveDir.X * FlySpeed, 0, moveDir.Z * FlySpeed)
-                elseif BodyVelocity then
-                    BodyVelocity:Destroy()
-                end
-            end)
-        elseif BodyVelocity then
-            BodyVelocity:Destroy()
-        end
-    end
+LocalPlayerTab:CreateButton({
+    Name = "Fly",
+    Callback = function()
+      loadstring(game:HttpGet("https://raw.githubusercontent.com/thalles781/HUB-teste/refs/heads/main/flyv3.lua"))()
+      end
 })
-
+        
+        
 -- =========================
 -- ABA TELEPORT
 -- =========================
