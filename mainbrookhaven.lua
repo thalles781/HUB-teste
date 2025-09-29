@@ -1,4 +1,4 @@
---// Ghost Hub Final Unificado
+--// Moon Hub Final Unificado
 local Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
 
 local Window = Rayfield:CreateWindow({
@@ -133,43 +133,6 @@ LocalPlayerTab:CreateToggle({
     end
 })
 
--- Copiar Skin/Roupas por Nick
-LocalPlayerTab:CreateInput({
-    Name = "Copiar Skin (Nick)",
-    PlaceholderText = "Digite o Nick do jogador",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Nick)
-        local target = game.Players:FindFirstChild(Nick)
-        local player = game.Players.LocalPlayer
-        if target and target.Character and player.Character then
-            local success, err = pcall(function()
-                -- Shirt
-                if target.Character:FindFirstChildOfClass("Shirt") then
-                    local s = target.Character:FindFirstChildOfClass("Shirt"):Clone()
-                    s.Parent = player.Character
-                end
-                -- Pants
-                if target.Character:FindFirstChildOfClass("Pants") then
-                    local p = target.Character:FindFirstChildOfClass("Pants"):Clone()
-                    p.Parent = player.Character
-                end
-                -- Accessories/Hats
-                for _, acc in pairs(target.Character:GetChildren()) do
-                    if acc:IsA("Accessory") then
-                        local clone = acc:Clone()
-                        clone.Parent = player.Character
-                    end
-                end
-            end)
-            if not success then
-                warn("Não foi possível copiar roupas: "..err)
-            end
-        else
-            warn("Jogador não encontrado ou sem personagem")
-        end
-    end
-})
-
 -- Fly
 local FlyEnabled = false
 local FlySpeed = 50
@@ -223,29 +186,8 @@ LocalPlayerTab:CreateToggle({
 -- =========================
 local TeleportTab = Window:CreateTab("Teleport", 4483362458)
 
-TeleportTab:CreateInput({
-    Name = "Teleporte por Nick",
-    PlaceholderText = "Digite o Nick do jogador",
-    RemoveTextAfterFocusLost = false,
-    Callback = function(Nick)
-        local target = game.Players:FindFirstChild(Nick)
-        local player = game.Players.LocalPlayer
-        if target and target.Character and target.Character:FindFirstChild("HumanoidRootPart") then
-            if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                player.Character.HumanoidRootPart.CFrame = target.Character.HumanoidRootPart.CFrame + Vector3.new(0,3,0)
-            end
-        else
-            warn("Jogador não encontrado ou sem personagem")
-        end
-    end
-})
-
--- =========================
--- ABA TELEPORT
--- =========================
-local TeleportTab = Window:CreateTab("Teleport", 4483362458)
-
 -- Teleporte por Nick
+TeleportTab:CreateSection("Teleport Players")
 TeleportTab:CreateInput({
     Name = "Teleporte por Nick",
     PlaceholderText = "Digite o Nick do jogador",
@@ -267,14 +209,15 @@ TeleportTab:CreateInput({
 TeleportTab:CreateSection("Lugares Fixos")
 
 local Lugares = {
-    ["Praça"] = Vector3.new(-0.57, 2.71, -1.05)
+    ["Praça"] = Vector3.new(-0.57, 2.71, -1.05),
+    ["Escola"] = Vector3.new(-312, 3.01, 211.61)
 }
 
 local LugarSelecionado = "Praça" -- já começa como Praça
 
 TeleportTab:CreateDropdown({
     Name = "Escolha o lugar",
-    Options = {"Praça"},
+    Options = {"Praça", "Escola"},
     CurrentOption = {"Praça"},
     MultipleOptions = false,
     Callback = function(Option)
@@ -443,93 +386,214 @@ ESPTab:CreateToggle({
 })
 
 -- =========================
--- ESP Vehicles
--- =========================
-local VehiclesFolder = workspace:WaitForChild("Vehicles")
-local EspVehicles = false
-local EspVehiclesConnections = {}
-
-local function addVehicleEsp(vehicle)
-    if not vehicle:IsA("Model") then return end
-    local primary = vehicle:FindFirstChildWhichIsA("BasePart")
-    if not primary then return end
-
-    -- Evita duplicar ESP
-    if primary:FindFirstChild("ESP_Vehicle") then return end
-
-    local billboard = Instance.new("BillboardGui")
-    billboard.Name = "ESP_Vehicle"
-    billboard.Size = UDim2.new(0, 100, 0, 20)
-    billboard.AlwaysOnTop = true
-    billboard.StudsOffset = Vector3.new(0, 3, 0)
-    billboard.Parent = primary
-
-    local label = Instance.new("TextLabel")
-    label.Size = UDim2.new(1, 0, 1, 0)
-    label.BackgroundTransparency = 1
-    label.TextColor3 = Color3.fromRGB(255, 255, 0)
-    label.TextStrokeTransparency = 0
-    label.TextScaled = true
-    label.Text = vehicle.Name
-    label.Parent = billboard
-end
-
-local function removeVehicleEsp(vehicle)
-    if not vehicle:IsA("Model") then return end
-    local primary = vehicle:FindFirstChildWhichIsA("BasePart")
-    if not primary then return end
-    if primary:FindFirstChild("ESP_Vehicle") then
-        primary.ESP_Vehicle:Destroy()
-    end
-end
-
-local function enableVehicleEsp()
-    -- Adiciona ESP a todos os carros já existentes
-    for _, vehicle in pairs(VehiclesFolder:GetChildren()) do
-        addVehicleEsp(vehicle)
-    end
-
-    -- Detecta novos carros
-    EspVehiclesConnections["Added"] = VehiclesFolder.ChildAdded:Connect(function(vehicle)
-        task.wait(0.2) -- espera carregar a model
-        addVehicleEsp(vehicle)
-    end)
-
-    -- Remove ESP de carros que forem deletados
-    EspVehiclesConnections["Removed"] = VehiclesFolder.ChildRemoved:Connect(function(vehicle)
-        removeVehicleEsp(vehicle)
-    end)
-end
-
-local function disableVehicleEsp()
-    -- Remove todos ESP existentes
-    for _, vehicle in pairs(VehiclesFolder:GetChildren()) do
-        removeVehicleEsp(vehicle)
-    end
-
-    -- Desconecta eventos
-    for _, conn in pairs(EspVehiclesConnections) do
-        conn:Disconnect()
-    end
-    EspVehiclesConnections = {}
-end
-
--- Toggle dentro da aba ESP
-EspTab:CreateToggle({
-    Name = "ESP Vehicles",
-    CurrentValue = false,
-    Callback = function(Value)
-        EspVehicles = Value
-        if EspVehicles then
-            enableVehicleEsp()
-        else
-            disableVehicleEsp()
-        end
-    end
-})
-
--- =========================
 -- ABA VISUAL
 -- =========================
 local VisualTab = Window:CreateTab("Visual", 4483362458)
-VisualTab:CreateLabel("Em breve...")
+
+VisualTab:CreateSection("Funções visuais")
+
+VisualTab:CreateLabel({
+    Name = "Em breve..."
+})
+
+-- =========================
+-- SISTEMA DE TRADUÇÃO
+-- =========================
+local IdiomaAtual = "en"
+
+local Traducoes = {
+    ["en"] = {
+        Credits = "Credits",
+        LocalPlayer = "LocalPlayer",
+        Teleport = "Teleport",
+        Spect = "Spect",
+        Casa = "House",
+        Tools = "Tools",
+        ESP = "ESP",
+        Visual = "Visual",
+        Config = "Settings",
+
+        -- Créditos
+        Credit1 = "Made by: thalles456u",
+        Credit2 = "UI by: Rayfield",
+        Credit3 = "Any questions? Join our Discord! Click below!",
+
+        DiscordBtn = "Click here to copy the Discord link!",
+
+        -- LocalPlayer
+        Speed = "Speed",
+        InfJump = "Infinity Jump",
+        Noclip = "Noclip",
+        Fullbring = "Fullbring",
+        Fly = "Fly (PC & Mobile)",
+
+        -- Teleport
+        TeleportPlayers = "Teleport Players",
+        TeleportNick = "Teleport by Nick",
+        FixedPlaces = "Fixed Places",
+        ChoosePlace = "Choose the place",
+        TeleportBtn = "Teleport",
+        TeleportNotify = "No place selected!",
+
+        -- Spect
+        SpectNick = "Spectate by Nick",
+
+        -- Casa
+        UnbanAll = "Unban All",
+        AutoUnban = "Auto Unban",
+
+        -- Tools
+        ToolsMsg = "These functions are still being developed!",
+
+        -- ESP
+        EspToggle = "Enable ESP",
+
+        -- Visual
+        VisualSection = "Visual functions",
+        Soon = "Coming soon...",
+
+        -- Config
+        Language = "Language"
+    },
+    ["pt"] = {
+        Credits = "Créditos",
+        LocalPlayer = "LocalPlayer",
+        Teleport = "Teleportar",
+        Spect = "Espectar",
+        Casa = "Casa",
+        Tools = "Ferramentas",
+        ESP = "ESP",
+        Visual = "Visual",
+        Config = "Configurações",
+
+        -- Créditos
+        Credit1 = "Feito por: thalles456u",
+        Credit2 = "Interface por: Rayfield",
+        Credit3 = "Alguma dúvida? Entre no nosso discord! Apenas clique abaixo!",
+
+        DiscordBtn = "Clique aqui para copiar o link do Discord!",
+
+        -- LocalPlayer
+        Speed = "Velocidade",
+        InfJump = "Pulo Infinito",
+        Noclip = "Noclip",
+        Fullbring = "Fullbring",
+        Fly = "Voar (PC & Mobile)",
+
+        -- Teleport
+        TeleportPlayers = "Teleportar Jogadores",
+        TeleportNick = "Teleporte por Nick",
+        FixedPlaces = "Lugares Fixos",
+        ChoosePlace = "Escolha o lugar",
+        TeleportBtn = "Teleportar",
+        TeleportNotify = "Nenhum lugar selecionado!",
+
+        -- Spect
+        SpectNick = "Espectar por Nick",
+
+        -- Casa
+        UnbanAll = "Desbanir Todos",
+        AutoUnban = "Auto Unban",
+
+        -- Tools
+        ToolsMsg = "Essas funções ainda estão sendo desenvolvidas!",
+
+        -- ESP
+        EspToggle = "Ativar ESP",
+
+        -- Visual
+        VisualSection = "Funções visuais",
+        Soon = "Em breve...",
+
+        -- Config
+        Language = "Idioma"
+    },
+    ["es"] = {
+        Credits = "Créditos",
+        LocalPlayer = "Jugador Local",
+        Teleport = "Teletransporte",
+        Spect = "Espectar",
+        Casa = "Casa",
+        Tools = "Herramientas",
+        ESP = "ESP",
+        Visual = "Visual",
+        Config = "Configuración",
+
+        -- Créditos
+        Credit1 = "Hecho por: thalles456u",
+        Credit2 = "Interfaz por: Rayfield",
+        Credit3 = "¿Dudas? Únete a nuestro Discord! Haz clic abajo!",
+
+        DiscordBtn = "Haz clic aquí para copiar el link de Discord!",
+
+        -- LocalPlayer
+        Speed = "Velocidad",
+        InfJump = "Salto Infinito",
+        Noclip = "Noclip",
+        Fullbring = "Fullbring",
+        Fly = "Volar (PC & Móvil)",
+
+        -- Teleport
+        TeleportPlayers = "Teletransportar Jugadores",
+        TeleportNick = "Teletransporte por Nick",
+        FixedPlaces = "Lugares Fijos",
+        ChoosePlace = "Elige el lugar",
+        TeleportBtn = "Teletransportar",
+        TeleportNotify = "¡Ningún lugar seleccionado!",
+
+        -- Spect
+        SpectNick = "Espectar por Nick",
+
+        -- Casa
+        UnbanAll = "Desbanear Todos",
+        AutoUnban = "Auto Unban",
+
+        -- Tools
+        ToolsMsg = "¡Estas funciones aún están en desarrollo!",
+
+        -- ESP
+        EspToggle = "Activar ESP",
+
+        -- Visual
+        VisualSection = "Funciones visuales",
+        Soon = "Próximamente...",
+
+        -- Config
+        Language = "Idioma"
+    }
+}
+
+-- =========================
+-- FUNÇÃO DE TRADUZIR
+-- =========================
+local function T(chave)
+    return Traducoes[IdiomaAtual][chave] or chave
+end
+
+-- =========================
+-- ABA DE CONFIG
+-- =========================
+local ConfigTab = Window:CreateTab(T("Config"), 4483362458)
+
+ConfigTab:CreateDropdown({
+    Name = T("Language"),
+    Options = {"English", "Português", "Español"},
+    CurrentOption = {"English"},
+    MultipleOptions = false,
+    Callback = function(Option)
+        if Option[1] == "English" then
+            IdiomaAtual = "en"
+        elseif Option[1] == "Português" then
+            IdiomaAtual = "pt"
+        elseif Option[1] == "Español" then
+            IdiomaAtual = "es"
+        end
+        Rayfield:Notify({
+            Title = "Language",
+            Content = "Idioma alterado para: " .. Option[1],
+            Duration = 5,
+            Image = 4483362458
+        })
+        -- Aqui você pode futuramente recriar as abas e textos já traduzidos
+    end
+})
