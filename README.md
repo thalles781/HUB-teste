@@ -17,3 +17,15 @@ Temos atualizações muito frequentes!
 
 Entre no nosso discord, ele ainda está sendo produzido!
 ```https://discord.gg/WAGqyEfGJe```
+
+Moon Hub scripts:
+Brookhaven:
+```loadstring(game:HttpGet("https://raw.githubusercontent.com/thalles781/HUB-teste/refs/heads/main/mainbrookhaven.lua"))()```
+
+99 nights in forest:
+```loadstring(game:HttpGet("https://raw.githubusercontent.com/thalles781/HUB-teste/refs/heads/main/main99nights.lua"))()```
+
+Forsaken:
+...
+
+
