@@ -12,7 +12,7 @@ local Keys = {
     "Z4M1-GT7Q-V2S6"
 }
 
-local URL = "https://raw.githubusercontent.com/thalles781/HUB-teste/refs/heads/main/mainbrookhaven.lua" -- HUB
+local URL = "https://raw.githubusercontent.com/thalles781/HUB-teste/refs/heads/main/Troll.lua" -- HUB
 
 local GetKeyURL = "https://iusanh.mimo.run/index.html" -- <<--- link para pegar a key
 
